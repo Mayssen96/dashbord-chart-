@@ -1,0 +1,13 @@
+.card-tasks .card-body img {
+    display: block;
+    margin: 0 auto; /* Centre l'image horizontalement */
+  }
+
+  /* Ajouter une media query pour les affichages mobiles */
+  @media only screen and (max-width: 767px) {
+    .card-tasks .card-body img {
+      /* Ajouter des styles spécifiques pour les affichages mobiles */
+      max-width: 50%; /* La largeur maximale de l'image est définie sur 100% de la largeur de son conteneur */
+      height: auto; /* La hauteur est automatiquement ajustée pour conserver les proportions de l'image */
+    }
+  }

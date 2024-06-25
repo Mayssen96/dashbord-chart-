@@ -1,0 +1,168 @@
+<p-toast></p-toast>
+
+<div class="card">
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <button
+                pButton
+                pRipple
+                label="Ajouter Société"
+                icon="pi pi-plus"
+                class="p-button-success mr-2"
+                (click)="openNew()"
+            ></button>
+            <button
+                pButton
+                pRipple
+                label="Supprimer la sélection"
+                icon="pi pi-trash"
+                class="p-button-danger"
+                (click)="deleteSelectedCompanies()"
+                [disabled]="!selectedCompanies || !selectedCompanies.length"
+            ></button>
+
+        </ng-template>
+
+
+         <ng-template pTemplate="right">
+            <!-- <button
+                pButton
+                pRipple
+                label="Export PDF"
+                icon="pi pi-export"
+                class="p-button-help"
+                (click)="ExportPDF()"
+            ></button> -->
+
+        </ng-template>
+
+    </p-toolbar>
+
+    <p-table
+        #dt
+        [value]="companies"
+        [rows]="10"
+        [paginator]="true"
+        [globalFilterFields]="['name']"
+        responsiveLayout="scroll"
+        [(selection)]="selectedCompanies"
+        [rowHover]="true"
+        dataKey="id"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [showCurrentPageReport]="true"
+    >
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                <h5 class="m-0">Gestion des companies</h5>
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input
+                    #globalSearch
+                        pInputText
+                        type="text"
+                        (input)=" dt.filterGlobal(
+                                        globalSearch.value,
+                                        'contains'
+                                    )
+                                "
+                        placeholder="Rechercher..."
+                        class="recherche"
+                    />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 3rem">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+                <th pSortableColumn="name">
+                    Nom de Société <p-sortIcon field="name"></p-sortIcon>
+                </th>
+
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-company>
+            <tr>
+                <td>
+                    <p-tableCheckbox [value]="company"></p-tableCheckbox>
+                </td>
+                <td>{{ company.name }}</td>
+
+                <td>
+                    <button
+                        pButton
+                        pRipple
+                        icon="pi pi-pencil"
+                        class="p-button-rounded p-button-success mr-2"
+                        (click)="editCompany(company)"
+                    ></button>
+                    <button
+                        pButton
+                        pRipple
+                        icon="pi pi-trash"
+                        class="p-button-rounded p-button-warning"
+                        (click)="deleteCompany(company)"
+                    ></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="flex align-items-center justify-content-between">
+                En total il y a {{ companies ? companies.length : 0 }} Société(s).
+            </div>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog
+    [(visible)]="companyDialog"
+    [style]="{ width: '450px' }"
+    header="Company Details"
+    [modal]="true"
+    styleClass="p-fluid"
+>
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="name">Nom de Société</label>
+            <input
+                type="text"
+                pInputText
+                id="name"
+                [(ngModel)]="company.name"
+                required
+                autofocus
+            />
+            <small class="p-error" *ngIf="!company.name"
+                >name is required.</small
+            >
+        </div>
+
+
+
+
+
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button
+            pButton
+            pRipple
+            label="Cancel"
+            icon="pi pi-times"
+            class="p-button-danger"
+            (click)="hideDialog()"
+        ></button>
+        <button
+            pButton
+            pRipple
+            label="Save"
+            icon="pi pi-check"
+            class="p-button-success mr-2"
+            (click)="saveCompany()"
+        ></button>
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>

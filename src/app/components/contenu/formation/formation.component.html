@@ -1,0 +1,205 @@
+<p-toast></p-toast>
+
+<div class="card">
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <button
+                pButton
+                pRipple
+                label="Ajouter Formation"
+                icon="pi pi-plus"
+                class="p-button-success mr-2"
+                (click)="openNew()"
+            ></button>
+            <button
+                pButton
+                pRipple
+                label="Supprimer la sélection"
+                icon="pi pi-trash"
+                class="p-button-danger"
+                (click)="deleteSelectedFormations()"
+                [disabled]="!selectedFormations || !selectedFormations.length"
+            ></button>
+        </ng-template>
+        <ng-template pTemplate="right">
+            <!-- Additional buttons can go here if needed -->
+        </ng-template>
+    </p-toolbar>
+
+    <p-table
+        #dt
+        [value]="formations"
+        [rows]="10"
+        [paginator]="true"
+        [globalFilterFields]="['title']"
+        responsiveLayout="scroll"
+        [(selection)]="selectedFormations"
+        [rowHover]="true"
+        dataKey="id"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [showCurrentPageReport]="true"
+    >
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                <h5 class="m-0">Gestion des formations</h5>
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input
+                        #globalSearch
+                        pInputText
+                        type="text"
+                        (input)="dt.filterGlobal(globalSearch.value, 'contains')"
+                        placeholder="Rechercher..."
+                        class="recherche"
+                    />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 3rem">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+                <th pSortableColumn="title">
+                    Titre de Formation <p-sortIcon field="title"></p-sortIcon>
+                </th>
+                <th pSortableColumn="startDate">
+                    Date de Début <p-sortIcon field="startDate"></p-sortIcon>
+                </th>
+                <th pSortableColumn="endDate">
+                    Date de Fin <p-sortIcon field="endDate"></p-sortIcon>
+                </th>
+                <th pSortableColumn="teacher">
+                    Enseignant <p-sortIcon field="teacher"></p-sortIcon>
+                </th>
+                <th pSortableColumn="duration">
+                    Durée <p-sortIcon field="duration"></p-sortIcon>
+                </th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-formation>
+            <tr>
+                <td>
+                    <p-tableCheckbox [value]="formation"></p-tableCheckbox>
+                </td>
+                <td>{{ formation.title }}</td>
+                <td>{{ formation.startDate }}</td>
+                <td>{{ formation.endDate }}</td>
+                <td>{{ formation.teacher }}</td>
+                <td>{{ formation.duration }}</td>
+                <td>
+                    <button
+                        pButton
+                        pRipple
+                        icon="pi pi-pencil"
+                        class="p-button-rounded p-button-success mr-2"
+                        (click)="editFormation(formation)"
+                    ></button>
+                    <button
+                        pButton
+                        pRipple
+                        icon="pi pi-trash"
+                        class="p-button-rounded p-button-warning"
+                        (click)="deleteFormation(formation)"
+                    ></button>
+                    <!-- <button
+                    pButton
+                    pRipple
+                    icon="pi pi-calendar"
+                     class="p-button-rounded p-button-primary"
+                    (click)="reserve(formation)"
+                  ></button> -->
+                  
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="flex align-items-center justify-content-between">
+                En total il y a {{ formations ? formations.length : 0 }} formation(s).
+            </div>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog
+    [(visible)]="formationDialog"
+    [style]="{ width: '450px' }"
+    header="Détails de la Formation"
+    [modal]="true"
+    styleClass="p-fluid"
+>
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="title">Titre de Formation</label>
+            <input
+                type="text"
+                pInputText
+                id="title"
+                [(ngModel)]="formation.title"
+                required
+                autofocus
+            />
+            <small class="p-error" *ngIf="!formation.title">Le titre est requis.</small>
+        </div>
+        <div class="field">
+            <label for="startDate">Date de Début</label>
+            <p-calendar
+                [(ngModel)]="formation.startDate"
+                [showIcon]="true"
+            ></p-calendar>
+        </div>
+        <div class="field">
+            <label for="endDate">Date de Fin</label>
+            <p-calendar
+                [(ngModel)]="formation.endDate"
+                [showIcon]="true"
+            ></p-calendar>
+        </div>
+        <div class="field">
+            <label for="teacher">Enseignant</label>
+            <input
+                type="text"
+                pInputText
+                id="teacher"
+                [(ngModel)]="formation.teacher"
+                required
+            />
+            <small class="p-error" *ngIf="!formation.teacher">L'enseignant est requis.</small>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button
+            pButton
+            pRipple
+            label="Annuler"
+            icon="pi pi-times"
+            class="p-button-danger"
+            (click)="hideDialog()"
+        ></button>
+        <button
+            *ngIf="!formation.id; else editButton"
+            pButton
+            pRipple
+            label="Enregistrer"
+            icon="pi pi-check"
+            class="p-button-success mr-2"
+            (click)="saveFormation()"
+            (click)="hideDialog()"
+        ></button>
+        <ng-template #editButton>
+            <button
+                pButton
+                pRipple
+                label="Enregistrer les modifications"
+                icon="pi pi-check"
+                class="p-button-success mr-2"
+                (click)="saveFormation()"
+                (click)="hideDialog()"
+            ></button>
+        </ng-template>
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>

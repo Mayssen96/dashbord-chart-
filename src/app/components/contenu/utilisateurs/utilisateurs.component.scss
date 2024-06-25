@@ -1,0 +1,48 @@
+@media (max-width: 767px) {
+    .p-button-success .mr-2 ,
+    .p-button-danger,
+    .p-button-help {
+      font-size: 14px; /* Hide the text */
+      padding: 5px; /* Add padding for better spacing */
+      justify-content: center;
+      flex-direction: column;
+
+
+    }
+
+    .card {
+        justify-content: center;
+    }
+
+.p-input-icon-left{
+    width: 10%;
+    justify-content: center;
+    flex-direction: column;
+
+}
+.recherche{
+    width: 20%;
+}
+
+  }
+  .checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.field {
+    flex: 0 0 48%; /* Adjust the width as needed */
+    margin-bottom: 15px;
+}
+
+/* Optional: Add some additional styling for better aesthetics */
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-check-input {
+    margin-top: 3px;
+}

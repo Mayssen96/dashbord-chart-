@@ -1,0 +1,162 @@
+<div class="">
+    <div class="div-form"  >
+    <style>
+        .div-form{
+            @media screen and (min-width: 1000px) {
+            padding-left: 30%;padding-right: 30%; margin-bottom: 20%;padding-left: 30%;padding-right: 30%; margin-bottom: 20%;
+        }
+
+        }
+
+    </style>
+   <!--<img  src="assets/images/logofinal.ico" alt="Sakai logo" class="div-image" style="width: 20%; height: 20%; margin-left: 40%;">-->
+    <div style="border-radius:56px; padding:0.3rem; background: linear-gradient(180deg, rgba(85, 9, 9, 0) 10%, rgba(11, 64, 107, 0) 30%);">
+
+        <form
+            [formGroup]="loginForm"
+            (ngSubmit)="login()"
+            style="
+
+                border-radius: 56px;
+                padding: 0.3rem;
+                background: linear-gradient(
+                    180deg,
+                    rgba(85, 9, 9, 0) 10%,
+                    rgba(11, 64, 107, 0) 30%
+                );
+            "
+        >
+            <div
+                class="h-full w-full m-0 py-7 px-4"
+                style="
+                    border-radius: 53px;
+                    background: linear-gradient(
+                        180deg,
+                        var(--surface-50) 38.9%,
+                        var(--surface-0)
+                    );
+                "
+            >
+                <div class="text-center mb-5">
+                    <div class="text-900 text-3xl font-medium mb-3">
+                        Welcome to ARTETA!
+                    </div>
+                    <span class="text-600 font-medium"
+                        >Sign in to continue</span
+                    >
+                </div>
+
+                <div class="w-full md:w-10 mx-auto">
+                    <label class="block text-900 text-xl font-medium mb-2"
+                        >email</label
+                    >
+                    <input
+                        formControlName="email"
+                        type="text"
+                        name="email"
+                        placeholder="email"
+                        pInputText
+                        class="w-full mb-3"
+                        style="padding: 1rem"
+                    />
+                    <p-message
+                        *ngIf="email && email.invalid && email.touched"
+                        severity="warn"
+                        text="email required!"
+                        styleClass="mr-2"
+                    ></p-message>
+
+                    <label class="block text-900 text-xl font-medium mb-2"
+                        >Password</label
+                    >
+
+
+                    <!-- Your input field with the eye icon -->
+                    <div class="password-input">
+                        <input
+                            formControlName="password"
+                            type="password"
+                            name="password"
+                            placeholder="Password"
+                            pInputText
+                            class="w-full mb-3"
+                            style="padding: 1rem"
+
+                        />
+
+                    </div>
+
+                    <!-- JavaScript to toggle password visibility -->
+                    <script>
+                        function togglePasswordVisibility() {
+                            const passwordInput = document.querySelector('input[name="password"]');
+                            const eyeIcon = document.querySelector('.toggle-password');
+
+                            if (passwordInput.type === 'password') {
+                                passwordInput.type = 'text';
+                                eyeIcon.classList.remove('fa-eye-slash');
+                                eyeIcon.classList.add('fa-eye');
+                            } else {
+                                passwordInput.type = 'password';
+                                eyeIcon.classList.remove('fa-eye');
+                                eyeIcon.classList.add('fa-eye-slash');
+                            }
+                        }
+                    </script>
+
+                    <style>
+                        /* Add some styling to the eye icon */
+                        .toggle-password {
+                            position: absolute;
+                            top: 50%;
+                            right: 1rem;
+                            transform: translateY(-50%);
+                            cursor: pointer;
+                            color: #666;
+                        }
+                    </style>
+                    <p-message
+                        *ngIf="password && password.invalid && password.touched"
+                        severity="warn"
+                        text="Password required!"
+                        styleClass="mr-2"
+                    ></p-message>
+
+                    <div
+                        class="flex align-items-center justify-content-between mb-5"
+                    >
+                        <div class="flex align-items-center">
+                            <p-checkbox
+                                id="rememberme1"
+                                styleClass="mr-2"
+                            ></p-checkbox>
+                            <label for="rememberme1">Remember me</label>
+                        </div>
+                        <a routerLink="/reset"
+                            class="font-medium no-underline ml-2 text-right cursor-pointer"
+                            style="color: rgb(122, 25, 25)"
+                            >Forgot password?</a
+                        >
+                    </div>
+                    <button
+                        pButton
+                        [disabled]="loginForm.invalid"
+                        type="submit"
+                        label="login"
+                        style="color: wheat ; background-color: rgb(19, 85, 139);"
+                    ></button>
+                    <!-- <p-button label="Click" ></p-button> -->
+                   <div>
+                        <a
+                            [routerLink]="['/register']"
+                            class="font-medium no-underline ml-2 text-right cursor-pointer"
+                            style="color: rgb(122, 25, 25)"
+                            >create account?</a
+                        >
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</div>

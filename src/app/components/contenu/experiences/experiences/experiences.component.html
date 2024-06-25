@@ -1,0 +1,102 @@
+<p-toast></p-toast>
+
+<div class="card">
+    <p-toolbar styleClass="mb-4">
+         <ng-template pTemplate="right">
+            <!-- <button
+                pButton
+                pRipple
+                label="Export PDF"
+                icon="pi pi-export"
+                class="p-button-help"
+                (click)="ExportPDF()"
+            ></button> -->
+
+        </ng-template>
+
+    </p-toolbar>
+
+    <p-table
+        #dt
+        [value]="experiences"
+        [rows]="10"
+        [paginator]="true"
+        [globalFilterFields]="['title', 'idClient']"
+        responsiveLayout="scroll"
+       
+        [rowHover]="true"
+        dataKey="id"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [showCurrentPageReport]="true"
+    >
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                <h5 class="m-0">Gestion des employés</h5>
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input
+                    #globalSearch
+                        pInputText
+                        type="text"
+                        (input)=" dt.filterGlobal(
+                                        globalSearch.value,
+                                        'contains'
+                                    )
+                                "
+                        placeholder="Rechercher..."
+                        class="recherche"
+                    />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 3rem">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+                
+                <th pSortableColumn="title">
+                    Title <p-sortIcon field="title"></p-sortIcon>
+                </th>
+                <th pSortableColumn="category">
+                    Category <p-sortIcon field="category"></p-sortIcon>
+                </th>
+                <th pSortableColumn="user">
+                    user <p-sortIcon field="user"></p-sortIcon>
+                </th>
+                
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-experience>
+            <tr>
+                <td>
+                    <p-tableCheckbox [value]="experience"></p-tableCheckbox>
+                </td>
+               
+                <td>{{ experience.title }}</td>
+                <td>{{ experience.idCategory }}</td>
+                <td>{{ experience.idClient }}</td>
+                <td>
+                    <button
+                        pButton
+                        pRipple
+                        icon="pi pi-pencil"
+                        class="p-button-rounded p-button-success mr-2"
+                        
+                    ></button>
+                    <button
+                        pButton
+                        pRipple
+                        icon="pi pi-trash"
+                        class="p-button-rounded p-button-warning"
+                        (click)="deleteExperience(experience._id)"
+                    ></button>
+                </td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+</div>
+
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
