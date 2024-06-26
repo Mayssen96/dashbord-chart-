@@ -1,0 +1,175 @@
+<p-toast></p-toast>
+
+<div class="card">
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <button
+                pButton
+                pRipple
+                label="Ajouter Reclamation"
+                icon="pi pi-plus"
+                class="p-button-success mr-2"
+                (click)="openNew()"
+            ></button>
+            <button
+                pButton
+                pRipple
+                label="Supprimer la sélection"
+                icon="pi pi-trash"
+                class="p-button-danger"
+                (click)="deleteSelectedreclamation()"
+                [disabled]="!selectedreservations || !selectedreservations.length"
+            ></button>
+
+        </ng-template>
+
+
+
+
+    </p-toolbar>
+
+    <p-table
+        #dt
+        [value]="reservations"
+        [rows]="10"
+        [paginator]="true"
+        [globalFilterFields]="['nomformation','date','status','details','formationId','userId']"
+        responsiveLayout="scroll"
+        [(selection)]="selectedreservations"
+        [rowHover]="true"
+        dataKey="id"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [showCurrentPageReport]="true"
+    >
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                <h5 class="m-0">Gestion des reservation</h5>
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input
+                    #globalSearch
+                        pInputText
+                        type="text"
+                        (input)=" dt.filterGlobal(
+                                        globalSearch.value,
+                                        'contains'
+                                    )
+                                "
+                        placeholder="Rechercher..."
+                        class="recherche"
+                    />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 3rem">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+                <th pSortableColumn="nomformation">
+                    Nom Formation <p-sortIcon field="nomformation"></p-sortIcon>
+                </th>
+                <th pSortableColumn="date">
+                    Date <p-sortIcon field="date"></p-sortIcon>
+                </th>
+                <th pSortableColumn="status">
+                    Status <p-sortIcon field="status"></p-sortIcon>
+                </th>
+                <th pSortableColumn="details">
+                    details <p-sortIcon field="details"></p-sortIcon>
+                </th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-reservation>
+            <tr>
+                <td>
+                    <p-tableCheckbox [value]="reservation"></p-tableCheckbox>
+                </td>
+                <td>{{ reservation.formation.title}}</td>
+                <td>{{ reservation.date }}</td>
+                <td>{{ reservation.status }}</td>
+                <td>{{ reservation.details }}</td>
+                <td>
+                    <button
+                        pButton
+                        pRipple
+                        icon="pi pi-pencil"
+                        class="p-button-rounded p-button-success mr-2"
+                        (click)="editreservation(reservation)"
+                    ></button>
+                    <button
+                        pButton
+                        pRipple
+                        icon="pi pi-trash"
+                        class="p-button-rounded p-button-warning"
+                        (click)="deletereservation(reservation)"
+                    ></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="flex align-items-center justify-content-between">
+                En total il y a {{ reservations ? reservations.length : 0 }} avis(s).
+            </div>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog
+    [(visible)]="reservationDialog"
+    [style]="{ width: '50%',height:'100%' }"
+    header="reclamation Details"
+    [modal]="true"
+    styleClass="p-fluid"
+>
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="commentaire">Commentaire</label>
+            <input
+                type="text"
+                pInputText
+                id="commentaire"
+                [(ngModel)]="reservation.nomformation"
+                required
+                autofocus
+            />
+            <small class="p-error" *ngIf="!reservation.nomformation"
+                >commentaire is required.</small
+            >
+        </div>
+        <div class="field">
+            <label for="date">Date</label>
+            <p-calendar
+             [(ngModel)]="reservation.date"
+             [showIcon]="true"
+             inputId="icondisplay" ></p-calendar>
+        </div>
+
+
+
+
+
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button
+            pButton
+            pRipple
+            label="Cancel"
+            icon="pi pi-times"
+            class="p-button-danger"
+            (click)="hideDialog()"
+        ></button>
+        <button
+            pButton
+            pRipple
+            label="Save"
+            icon="pi pi-check"
+            class="p-button-success mr-2"
+            (click)="savereservation()"
+        ></button>
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>

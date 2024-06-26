@@ -42,6 +42,7 @@ import { EvenementsComponent } from './evenements/evenements/evenements.componen
 import { EvenementsFormComponent } from './evenements/evenements-form/evenements-form.component';
 import { EvenementsDetailsComponent } from './evenements/evenements-details/evenements-details.component';
 import { ReservationComponent } from './reservation/reservation.component';
+import { DestinationCategoriesComponent } from './destination-categories/destination-categories.component';
 
 // import { AnalyseComponent } from './analyse/analyse.component';
 
@@ -65,6 +66,7 @@ import { ReservationComponent } from './reservation/reservation.component';
         EvenementsComponent,
         EvenementsFormComponent,
         EvenementsDetailsComponent,
+        DestinationCategoriesComponent,
         // AnalyseComponent,
 
 
