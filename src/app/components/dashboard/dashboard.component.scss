@@ -11,3 +11,19 @@
       height: auto; /* La hauteur est automatiquement ajustée pour conserver les proportions de l'image */
     }
   }
+  .container {
+    padding: 20px;
+    max-width: 600px; /* Set a maximum width for the chart container */
+    margin: 0 auto; /* Center the container horizontally */
+  }
+  
+  .chart-container {
+    margin-top: 20px;
+  }
+  
+  canvas {
+    width: 100% !important; /* Ensure the canvas takes full width of its container */
+    max-width: 400px; /* Limit the maximum width of the chart itself */
+    height: auto; /* Allow the height to adjust automatically */
+  }
+  

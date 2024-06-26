@@ -1,10 +1,25 @@
-<div style="display: block;">
-    <canvas baseChart
-      [data]="doughnutChartData"
-      [labels]="doughnutChartLabels"
-      [chartType]="doughnutChartType"
-      [options]="doughnutChartOptions"
-      [legend]="doughnutChartLegend"
-      [plugins]="doughnutChartPlugins">
-    </canvas>
+<div class="container">
+    <h1>Admin Dashboard</h1>
+  
+    <div class="chart-container">
+      <h2>User Roles</h2>
+      <canvas baseChart
+        [data]="doughnutChartData"
+        [type]="doughnutChartType"
+        [options]="doughnutChartOptions"
+        [legend]="doughnutChartLegend"
+        [plugins]="doughnutChartPlugins">
+      </canvas>
+    </div>
+  
+    <div class="chart-container">
+      <h2>Reservation Count</h2>
+      <canvas baseChart
+        [data]="barChartData"
+        [type]="barChartType"
+        [options]="barChartOptions"
+        [legend]="barChartLegend">
+      </canvas>
+    </div>
   </div>
+  

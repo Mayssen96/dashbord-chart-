@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-
 import {
     CommonModule,
     DatePipe,
@@ -7,6 +6,7 @@ import {
     LocationStrategy,
 } from '@angular/common';
 import { AppComponent } from './app.component';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppLayoutModule } from './layout/app.layout.module';
 import { NotfoundComponent } from './components/notfound/notfound.component';
@@ -51,6 +51,7 @@ import { AvisComponent } from './components/avis/avis.component';
     imports: [
         AppRoutingModule,
         AppLayoutModule,
+        FormsModule ,
         CommonModule,
         MenuModule,
         TableModule,
