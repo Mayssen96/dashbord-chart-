@@ -105,6 +105,7 @@ import { DestinationCategoriesComponent } from './destination-categories/destina
         DxCircularGaugeModule,
         DxTooltipModule,
         DxLinearGaugeModule,
+        
         DxChartModule,
         DxSelectBoxModule,
         NgChartsModule,

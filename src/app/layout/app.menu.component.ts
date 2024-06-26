@@ -56,10 +56,10 @@ export class AppMenuComponent implements OnInit {
                     {
                         label: 'Events',
                         icon: 'pi pi-fw pi-user-edit',
-                        routerLink: ['/contenu/formation'],
+                        routerLink: ['/contenu/events'],
                     },
                     {
-                        label: 'reservation',
+                        label: 'Reservation',
                         icon: 'pi pi-fw pi-user-edit',
                         routerLink: ['/contenu/reservation'],
                     },
@@ -69,8 +69,28 @@ export class AppMenuComponent implements OnInit {
                         label: 'Users',
                         icon: 'pi pi-fw pi-user-edit',
                         routerLink: ['/contenu/utilisateurs'],
-                    }
+                    },
+                    {
+                        label: 'Category',
+                        icon: 'pi pi-fw pi-user-edit',
+                        routerLink: ['/contenu/category'],
+                    },
+                    {
+                        label: 'Themes',
+                        icon: 'pi pi-fw pi-user-edit',
+                        routerLink: ['/contenu/themes'],
+                    },
+                    {
+                        label: 'Experiences',
+                        icon: 'pi pi-fw pi-user-edit',
+                        routerLink: ['/contenu/Experience'],   
+                    },
 
+                    {
+                        label: 'Destination Category ',
+                        icon: 'pi pi-fw pi-user-edit',
+                        routerLink: ['/contenu/DestinationCategory'],   
+                    },
 
                 ],
             },
