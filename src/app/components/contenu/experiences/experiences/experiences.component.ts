@@ -1,25 +1,63 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Table } from 'jspdf-autotable';
 import { Experience } from 'src/app/_models/experience';
 import { ExperiencesService } from 'src/app/_services/experiences.service';
 import Swal from 'sweetalert2';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { UserService } from 'src/app/_services/users.service';
+import { CategoryDestinationService } from 'src/app/_services/category-destination.service';
 
 @Component({
   selector: 'app-experiences',
   templateUrl: './experiences.component.html',
-  styleUrls: ['./experiences.component.scss']
+  styleUrls: ['./experiences.component.scss'],
+  providers: [ConfirmationService, MessageService],
 })
 export class ExperiencesComponent implements OnInit {
 
   experiences:Experience[]=[]
-id!:number
-experience!:Experience
-constructor(private ar:ActivatedRoute,private experienceService : ExperiencesService){
-    this.getExperiences()
-    //this.getExperiencById()
-    
-  }
+  id!:number
+  
+  user!:string
+  category!:string
+  loading: boolean = true;
+  experience: Experience = new Experience();
+  userDialog: boolean = false;
+  //isAdmin: boolean = false;
+  exportColumns: any[] | undefined;
+  cols: any[] | undefined;
+  countusers: number = 0;
+  roles:any[]=['admin','user'];
+  // selectedRole : string = '';
+  //selectedRole: Role | null = null;
+  // companyName: string='';
+  @ViewChild('dt') dt: Table | undefined;
+  //CongeService: any;
+  currentUser:any;
+
+  constructor(private ar:ActivatedRoute,private experienceService : ExperiencesService,private userService:UserService,private categoryService:CategoryDestinationService){}
+  
   ngOnInit(): void {
+    this.getExperiences()
+    this.getExperiencById() 
+    
+    this.cols = [
+      {
+          field: 'title',
+          header: 'Title',
+          customExportHeader: 'title',
+      },
+      { field: 'idClient', header: 'Client' },
+      { field: 'idCategory', header: 'Category' },
+      { field: 'description', header: 'Description' },
+      { field: 'image', header: 'Image' },
+  ];
+
+  this.exportColumns = this.cols.map((col) => ({
+      title: col.header,
+      dataKey: col.field,
+  }));
   }
 
 getExperiences(){
@@ -27,17 +65,61 @@ getExperiences(){
       next:(data)=>{
         this.experiences=data
         console.log(this.experiences);
+        
       }
     });
   }
+  
 
   getExperiencById(){
     this.id = this.ar.snapshot.params['id'];
-      this.experienceService.getExperienceById(this.id).subscribe({next:(data)=>
+      this.experienceService.getExperienceById(this.id).subscribe({next:(data)=>{
         this.experience=data
+        this.userService.getUserById(data.idClient).subscribe({
+        next:(data)=>{
+          this.user=data.firstName+' '+data.lastName
+          console.log(this.user);
+          
+        }  
+        })
+        this.categoryService.getCategoriyById(data.idCategory).subscribe({
+          next:(data)=>{
+            this.category=data.name
+            console.log(this.category);
+          }  
+          })
+      }
+        
       });
       
   }
+  detailsExperience(experience: Experience) {
+    this.experience = { ...experience };
+    this.userDialog = true;
+    console.log(experience)
+    this.experienceService.getExperienceById(experience._id).subscribe({next:(data)=>{
+      this.experience=data
+      this.userService.getUserById(data.idClient).subscribe({
+      next:(data)=>{
+        this.user=data.firstName+' '+data.lastName
+        console.log(this.user);
+        
+      }  
+      })
+      this.categoryService.getCategoriyById(data.idCategory).subscribe({
+        next:(data)=>{
+          this.category=data.name
+          console.log(this.category);
+        }  
+        })
+    }
+      
+    });
+}
+hideDialog() {
+  this.userDialog = false;
+  this.loading = false;
+}
 deleteExperience(id:number){
     Swal.fire({
         title: "Are you sure?",

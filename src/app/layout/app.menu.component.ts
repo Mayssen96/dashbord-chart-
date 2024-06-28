@@ -83,7 +83,7 @@ export class AppMenuComponent implements OnInit {
                     {
                         label: 'Experiences',
                         icon: 'pi pi-fw pi-user-edit',
-                        routerLink: ['/contenu/Experience'],   
+                        routerLink: ['/contenu/experiences'],   
                     },
 
                     {

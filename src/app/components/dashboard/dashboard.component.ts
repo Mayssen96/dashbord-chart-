@@ -3,19 +3,18 @@ import { ChartData, ChartOptions, ChartType } from 'chart.js';
 import { MessageService } from 'primeng/api';
 import { UserService } from 'src/app/_services/users.service';
 import { ReservationService } from 'src/app/_services/reservation.service';
-import { Reservation } from 'src/app/_models/reservation';
 
 @Component({
   templateUrl: './dashboard.component.html',
   providers: [MessageService]
 })
 export class DashboardComponent implements OnInit {
-  adminCount!: number ;
-  clientCount!: number ;
+  adminCount!: number;
+  clientCount!: number;
   doughnutChartOptions: ChartOptions = {
     responsive: true,
   };
-  doughnutChartLabels: string[] = ['Admin', 'Client'];
+  doughnutChartLabels: string[] = ['admin', 'client'];
   doughnutChartData: ChartData<'doughnut'> = {
     labels: this.doughnutChartLabels,
     datasets: [{
@@ -92,42 +91,22 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadUserRolesData();
-    this.loadReservationData();
-    this.getUserCounts();
     this.loadUsersByAgeData();
   }
 
-  getUserCounts() {
+  loadUserRolesData() {
     this.userService.getUserCountsByRole().subscribe(
       (data) => {
         this.adminCount = data.adminCount;
         this.clientCount = data.clientCount;
+        this.doughnutChartData.datasets[0].data = [this.adminCount, this.clientCount];
       },
       (error) => {
-        console.error('Error fetching user counts:', error);
-        // Handle error appropriately, e.g., show an error message
-      }
-    );
-  }
-
-  loadUserRolesData() {
-    // Replace with actual service call to get user roles data
-    const adminCount = 2; // Example data
-    const clientCount = 5; // Example data
-    this.doughnutChartData.datasets[0].data = [adminCount, clientCount];
-  }
-
-  loadReservationData() {
-    this.reservationService.getTotalReservationCount().subscribe(
-      count => {
-        this.barChartData.datasets[0].data.push(count);
-      },
-      error => {
-        console.error('Error loading reservation count: ', error);
+        console.error('Error fetching user role counts:', error);
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'Failed to load reservation count.'
+          detail: 'Failed to load user role counts.'
         });
       }
     );
@@ -136,12 +115,16 @@ export class DashboardComponent implements OnInit {
   loadUsersByAgeData() {
     this.userService.getUserCountsByAge().subscribe(
       (data) => {
-        // Update bar chart data with age group counts from backend
+        // Assurez-vous que data est un tableau de nombres représentant les comptes par année de naissance
         this.barChartData.datasets[0].data = data;
       },
       (error) => {
-        console.error('Error loading users by age data:', error);
-        // Handle error appropriately
+        console.error('Error fetching user counts by age:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to load user counts by age.'
+        });
       }
     );
   }

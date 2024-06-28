@@ -1,21 +1,6 @@
 <p-toast></p-toast>
 
 <div class="card">
-    <p-toolbar styleClass="mb-4">
-         <ng-template pTemplate="right">
-            <!-- <button
-                pButton
-                pRipple
-                label="Export PDF"
-                icon="pi pi-export"
-                class="p-button-help"
-                (click)="ExportPDF()"
-            ></button> -->
-
-        </ng-template>
-
-    </p-toolbar>
-
     <p-table
         #dt
         [value]="experiences"
@@ -31,7 +16,7 @@
     >
         <ng-template pTemplate="caption">
             <div class="flex align-items-center justify-content-between">
-                <h5 class="m-0">Gestion des employés</h5>
+                <h5 class="m-0">Experiences Manage </h5>
                 <span class="p-input-icon-left">
                     <i class="pi pi-search"></i>
                     <input
@@ -43,7 +28,7 @@
                                         'contains'
                                     )
                                 "
-                        placeholder="Rechercher..."
+                        placeholder="Search..."
                         class="recherche"
                     />
                 </span>
@@ -58,11 +43,8 @@
                 <th pSortableColumn="title">
                     Title <p-sortIcon field="title"></p-sortIcon>
                 </th>
-                <th pSortableColumn="category">
-                    Category <p-sortIcon field="category"></p-sortIcon>
-                </th>
-                <th pSortableColumn="user">
-                    user <p-sortIcon field="user"></p-sortIcon>
+                <th pSortableColumn="image">
+                    Image <p-sortIcon field="image"></p-sortIcon>
                 </th>
                 
                 <th></th>
@@ -75,15 +57,17 @@
                 </td>
                
                 <td>{{ experience.title }}</td>
-                <td>{{ experience.idCategory }}</td>
-                <td>{{ experience.idClient }}</td>
+                <td>
+                    <img src="{{experience.image}}" width="100" heigth="50"/>
+                    
+                </td>
                 <td>
                     <button
                         pButton
                         pRipple
-                        icon="pi pi-pencil"
+                        icon="pi pi-info"
                         class="p-button-rounded p-button-success mr-2"
-                        
+                        (click)="detailsExperience(experience)"
                     ></button>
                     <button
                         pButton
@@ -98,5 +82,96 @@
 
     </p-table>
 </div>
+<p-dialog
+    [(visible)]="userDialog"
+    [style]="{ width: '450px' }"
+    header="Experience Details"
+    [modal]="true"
+    styleClass="p-fluid"
+    
+>
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="user">User</label>
+            <input
+                type="text"
+                pInputText
+                id="user"
+                [value]="user"
+                required
+                autofocus
+                disabled
+            />
+            
+        </div>
+
+        <div class="field">
+            <label for="category">Catgory</label>
+            <input
+                type="text"
+                pInputText
+                id="category"
+                [value]="category"
+                required
+                autofocus
+                disabled
+            />
+           
+        </div>
+        
+        <div class="field">
+            <label for="description">Description</label>
+            <input
+                type="text"
+                pInputText
+                id="category"
+                [(ngModel)]="experience.description "
+                required
+                autofocus
+                disabled
+            />
+           
+        </div>
+        <div class="field">
+            <label for="nblikes">Number of likes</label>
+            <input
+                type="text"
+                pInputText
+                id="nblikes"
+                [(ngModel)]="experience.likes.nb "
+                required
+                autofocus
+                disabled
+            />
+           
+        </div>
+        <div class="field">
+            <label for="nbunlikes">Number of unLikes</label>
+            <input
+                type="text"
+                pInputText
+                id="nbunlikes"
+                [(ngModel)]="experience.unLikes.nb "
+                required
+                autofocus
+                disabled
+            />
+           
+        </div>
+        
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button
+            pButton
+            pRipple
+            label="Cancel"
+            icon="pi pi-times"
+            class="p-button-danger"
+            (click)="hideDialog()"
+        ></button>
+        
+    </ng-template>
+</p-dialog>
 
 <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
