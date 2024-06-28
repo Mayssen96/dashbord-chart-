@@ -83,6 +83,9 @@ export class DashboardComponent implements OnInit {
   barChartType: ChartType = 'bar';
   barChartLegend = true;
 
+  loadingDoughnutChart = true;
+  loadingBarChart = true;
+
   constructor(
     private userService: UserService,
     private reservationService: ReservationService,
@@ -100,6 +103,7 @@ export class DashboardComponent implements OnInit {
         this.adminCount = data.adminCount;
         this.clientCount = data.clientCount;
         this.doughnutChartData.datasets[0].data = [this.adminCount, this.clientCount];
+        this.loadingDoughnutChart = false;
       },
       (error) => {
         console.error('Error fetching user role counts:', error);
@@ -108,6 +112,7 @@ export class DashboardComponent implements OnInit {
           summary: 'Error',
           detail: 'Failed to load user role counts.'
         });
+        this.loadingDoughnutChart = false;
       }
     );
   }
@@ -115,8 +120,9 @@ export class DashboardComponent implements OnInit {
   loadUsersByAgeData() {
     this.userService.getUserCountsByAge().subscribe(
       (data) => {
-        // Assurez-vous que data est un tableau de nombres représentant les comptes par année de naissance
+        // Ensure data is an array of numbers representing counts by birth year
         this.barChartData.datasets[0].data = data;
+        this.loadingBarChart = false;
       },
       (error) => {
         console.error('Error fetching user counts by age:', error);
@@ -125,6 +131,7 @@ export class DashboardComponent implements OnInit {
           summary: 'Error',
           detail: 'Failed to load user counts by age.'
         });
+        this.loadingBarChart = false;
       }
     );
   }
