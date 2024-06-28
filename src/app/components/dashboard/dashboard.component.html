@@ -1,25 +1,28 @@
 <div class="container">
-    <h1>Admin Dashboard</h1>
-  
-    <div class="chart-container">
-      <h2>User Roles</h2>
-      <canvas baseChart
-        [data]="doughnutChartData"
-        [type]="doughnutChartType"
-        [options]="doughnutChartOptions"
-        [legend]="doughnutChartLegend"
-        [plugins]="doughnutChartPlugins">
-      </canvas>
-    </div>
-  
-    <div class="chart-container">
-      <h2>Reservation Count</h2>
-      <canvas baseChart
-        [data]="barChartData"
-        [type]="barChartType"
-        [options]="barChartOptions"
-        [legend]="barChartLegend">
-      </canvas>
-    </div>
+  <h1>Admin Dashboard</h1>
+
+  <div class="chart-container" style="width: 50%; margin: 0 auto;">
+    <h2>User Roles</h2>
+    <canvas baseChart
+      [data]="doughnutChartData"
+      [type]="doughnutChartType"
+      [options]="doughnutChartOptions"
+      [legend]="doughnutChartLegend"
+      style="width: 100%; height: auto;">
+    </canvas>
   </div>
+
   
+
+  <div class="chart-container" style="width: 50%; margin: 30px auto;">
+    <h2>Users by Age Group</h2>
+    <canvas baseChart
+      [data]="barChartData"
+      [labels]="barChartLabels"
+      [type]="barChartType"
+      [options]="barChartOptions"
+      [legend]="barChartLegend"
+      style="width: 100%; height: auto;">
+    </canvas>
+  </div>
+</div>

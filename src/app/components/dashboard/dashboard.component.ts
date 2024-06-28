@@ -10,6 +10,8 @@ import { Reservation } from 'src/app/_models/reservation';
   providers: [MessageService]
 })
 export class DashboardComponent implements OnInit {
+  adminCount!: number ;
+  clientCount!: number ;
   doughnutChartOptions: ChartOptions = {
     responsive: true,
   };
@@ -33,22 +35,22 @@ export class DashboardComponent implements OnInit {
         beginAtZero: true,
         title: {
           display: true,
-          text: 'Number of Reservations'
+          text: 'Number of Users'
         }
       },
       x: {
         title: {
           display: true,
-          text: 'Reservations'
+          text: 'Year of Birth'
         }
       }
     }
   };
-  barChartLabels: string[] = ['Reservations'];
+  barChartLabels: string[] = ['2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010'];
   barChartData: ChartData<'bar'> = {
     labels: this.barChartLabels,
     datasets: [{
-      label: 'Reservations',
+      label: 'Users by Age Group',
       data: [],
       backgroundColor: [
         'rgba(255, 99, 132, 0.2)',
@@ -57,7 +59,11 @@ export class DashboardComponent implements OnInit {
         'rgba(75, 192, 192, 0.2)',
         'rgba(54, 162, 235, 0.2)',
         'rgba(153, 102, 255, 0.2)',
-        'rgba(201, 203, 207, 0.2)'
+        'rgba(201, 203, 207, 0.2)',
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(255, 159, 64, 0.2)',
+        'rgba(255, 205, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)'
       ],
       borderColor: [
         'rgb(255, 99, 132)',
@@ -66,7 +72,11 @@ export class DashboardComponent implements OnInit {
         'rgb(75, 192, 192)',
         'rgb(54, 162, 235)',
         'rgb(153, 102, 255)',
-        'rgb(201, 203, 207)'
+        'rgb(201, 203, 207)',
+        'rgb(255, 99, 132)',
+        'rgb(255, 159, 64)',
+        'rgb(255, 205, 86)',
+        'rgb(75, 192, 192)'
       ],
       borderWidth: 1
     }]
@@ -83,6 +93,21 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.loadUserRolesData();
     this.loadReservationData();
+    this.getUserCounts();
+    this.loadUsersByAgeData();
+  }
+
+  getUserCounts() {
+    this.userService.getUserCountsByRole().subscribe(
+      (data) => {
+        this.adminCount = data.adminCount;
+        this.clientCount = data.clientCount;
+      },
+      (error) => {
+        console.error('Error fetching user counts:', error);
+        // Handle error appropriately, e.g., show an error message
+      }
+    );
   }
 
   loadUserRolesData() {
@@ -104,6 +129,19 @@ export class DashboardComponent implements OnInit {
           summary: 'Error',
           detail: 'Failed to load reservation count.'
         });
+      }
+    );
+  }
+
+  loadUsersByAgeData() {
+    this.userService.getUserCountsByAge().subscribe(
+      (data) => {
+        // Update bar chart data with age group counts from backend
+        this.barChartData.datasets[0].data = data;
+      },
+      (error) => {
+        console.error('Error loading users by age data:', error);
+        // Handle error appropriately
       }
     );
   }

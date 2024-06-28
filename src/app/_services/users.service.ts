@@ -63,5 +63,11 @@ export class UserService {
     countUser():Observable<any>{
         return this.http.get(`${this.apiUrl}count/user`);
     }
+    getUserCountsByRole(): Observable<{ adminCount: number; clientCount: number }> {
+        return this.http.get<{ adminCount: number; clientCount: number }>(`${this.apiUrl}count/user-counts-by-role`);
+      }
+      getUserCountsByAge(): Observable<any> {
+        return this.http.get<any>(`${this.apiUrl}/countage/users-by-age`);
+      }
 
 }

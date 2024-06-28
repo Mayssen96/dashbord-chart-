@@ -94,18 +94,7 @@ export class AppMenuComponent implements OnInit {
 
                 ],
             },
-            {
-                label: 'Parameters',
-                items: isAdmin?[
-                    {
-                        label: 'client',
-                        icon: 'pi pi-fw pi-user-edit',
-                        routerLink: ['/contenu/utilisateurs'],
-                    }
-
-
-                ]:[],
-            },
+        
         ];
     }
     private fetchUserData() {
