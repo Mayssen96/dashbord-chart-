@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ChartData, ChartOptions, ChartType } from 'chart.js';
+import { ChartData, ChartOptions, ChartType, TooltipItem } from 'chart.js';
 import { MessageService } from 'primeng/api';
 import { UserService } from 'src/app/_services/users.service';
-import { ReservationService } from 'src/app/_services/reservation.service';
+
+interface UserAgeData {
+  range: string;
+  count: number;
+}
 
 @Component({
   templateUrl: './dashboard.component.html',
@@ -25,38 +29,31 @@ export class DashboardComponent implements OnInit {
   };
   doughnutChartType: ChartType = 'doughnut';
   doughnutChartLegend = true;
-  doughnutChartPlugins = [];
 
-  barChartOptions: ChartOptions = {
+  ageCategoryChartOptions: ChartOptions = {
     responsive: true,
-    scales: {
-      y: {
-        beginAtZero: true,
-        title: {
-          display: true,
-          text: 'Number of Users'
-        }
-      },
-      x: {
-        title: {
-          display: true,
-          text: 'Year of Birth'
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: (tooltipItem: TooltipItem<'doughnut'>) => {
+            const count = tooltipItem.raw as number;
+            const percentage = ((count / this.totalUsers) * 100).toFixed(2);
+            return `Count: ${count} (${percentage}%)`;
+          }
         }
       }
     }
   };
-  barChartLabels: string[] = ['2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010'];
-  barChartData: ChartData<'bar'> = {
-    labels: this.barChartLabels,
+  ageCategoryChartLabels: string[] = [];
+  ageCategoryChartData: ChartData<'doughnut'> = {
+    labels: this.ageCategoryChartLabels,
     datasets: [{
-      label: 'Users by Age Group',
       data: [],
       backgroundColor: [
         'rgba(255, 99, 132, 0.2)',
-        'rgba(255, 159, 64, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
         'rgba(255, 205, 86, 0.2)',
         'rgba(75, 192, 192, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
         'rgba(153, 102, 255, 0.2)',
         'rgba(201, 203, 207, 0.2)',
         'rgba(255, 99, 132, 0.2)',
@@ -64,37 +61,24 @@ export class DashboardComponent implements OnInit {
         'rgba(255, 205, 86, 0.2)',
         'rgba(75, 192, 192, 0.2)'
       ],
-      borderColor: [
-        'rgb(255, 99, 132)',
-        'rgb(255, 159, 64)',
-        'rgb(255, 205, 86)',
-        'rgb(75, 192, 192)',
-        'rgb(54, 162, 235)',
-        'rgb(153, 102, 255)',
-        'rgb(201, 203, 207)',
-        'rgb(255, 99, 132)',
-        'rgb(255, 159, 64)',
-        'rgb(255, 205, 86)',
-        'rgb(75, 192, 192)'
-      ],
-      borderWidth: 1
+      hoverOffset: 4
     }]
   };
-  barChartType: ChartType = 'bar';
-  barChartLegend = true;
+  ageCategoryChartType: ChartType = 'doughnut';
+  ageCategoryChartLegend = true;
 
   loadingDoughnutChart = true;
-  loadingBarChart = true;
+  loadingAgeCategoryChart = true;
+  totalUsers: number = 0;
 
   constructor(
     private userService: UserService,
-    private reservationService: ReservationService,
     private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
     this.loadUserRolesData();
-    this.loadUsersByAgeData();
+    this.loadUsersByAgeCategoryData();
   }
 
   loadUserRolesData() {
@@ -117,12 +101,13 @@ export class DashboardComponent implements OnInit {
     );
   }
 
-  loadUsersByAgeData() {
+  loadUsersByAgeCategoryData() {
     this.userService.getUserCountsByAge().subscribe(
-      (data) => {
-        // Ensure data is an array of numbers representing counts by birth year
-        this.barChartData.datasets[0].data = data;
-        this.loadingBarChart = false;
+      (data: UserAgeData[]) => {
+        this.ageCategoryChartLabels = data.map(item => item.range);
+        this.ageCategoryChartData.datasets[0].data = data.map(item => item.count);
+        this.totalUsers = data.reduce((sum, item) => sum + item.count, 0);
+        this.loadingAgeCategoryChart = false;
       },
       (error) => {
         console.error('Error fetching user counts by age:', error);
@@ -131,8 +116,10 @@ export class DashboardComponent implements OnInit {
           summary: 'Error',
           detail: 'Failed to load user counts by age.'
         });
-        this.loadingBarChart = false;
+        this.loadingAgeCategoryChart = false;
       }
     );
   }
 }
+
+

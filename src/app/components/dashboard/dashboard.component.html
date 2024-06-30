@@ -1,31 +1,35 @@
 <div class="container">
   <h1>Admin Dashboard</h1>
 
+  <!-- User Roles Chart -->
   <div class="chart-container" style="width: 50%; margin: 0 auto;">
     <h2>User Roles</h2>
     <div *ngIf="loadingDoughnutChart">Loading...</div>
     <div *ngIf="!loadingDoughnutChart">
       <canvas baseChart
-        [data]="doughnutChartData"
-        [type]="doughnutChartType"
-        [options]="doughnutChartOptions"
-        [legend]="doughnutChartLegend"
-        style="width: 100%; height: auto;">
+              [data]="doughnutChartData"
+              [type]="doughnutChartType"
+              [options]="doughnutChartOptions"
+              [legend]="doughnutChartLegend"
+              style="width: 100%; height: auto;">
       </canvas>
     </div>
   </div>
 
+  <!-- Separator Line -->
+  <hr style="border: 0; height: 2px; background: #333; margin: 40px 0; width: 80%; margin-left: auto; margin-right: auto;">
+
+  <!-- Users by Age Category Chart -->
   <div class="chart-container" style="width: 50%; margin: 30px auto;">
-    <h2>Users by Age Group</h2>
-    <div *ngIf="loadingBarChart">Loading...</div>
-    <div *ngIf="!loadingBarChart">
+    <h2>Users by Age Category</h2>
+    <div *ngIf="loadingAgeCategoryChart">Loading...</div>
+    <div *ngIf="!loadingAgeCategoryChart">
       <canvas baseChart
-        [data]="barChartData"
-        [labels]="barChartLabels"
-        [type]="barChartType"
-        [options]="barChartOptions"
-        [legend]="barChartLegend"
-        style="width: 100%; height: auto;">
+              [data]="ageCategoryChartData"
+              [type]="ageCategoryChartType"
+              [options]="ageCategoryChartOptions"
+              [legend]="ageCategoryChartLegend"
+              style="width: 100%; height: auto;">
       </canvas>
     </div>
   </div>
