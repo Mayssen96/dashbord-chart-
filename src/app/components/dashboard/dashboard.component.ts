@@ -40,33 +40,32 @@ export class DashboardComponent implements OnInit {
             const index = tooltipItem.dataIndex;
             const dataset = tooltipItem.dataset as ChartData<'doughnut'>['datasets'][number];
             const count = dataset.data?.[index] as number;
-            const percentage = ((count / this.totalUsers) * 100).toFixed(2);
             const label = dataset.label ?? '';
-            const ageRange = this.ageCategoryChartLabels[index] ?? '';
             
-            return `User number: ${count} (${percentage}%) - Age Range: ${ageRange}`;
+            return `User number: ${count}`;
           }
         }
       }
     }
   };
-  
-  ageCategoryChartLabels: string[] = [];
+
+  ageCategoryChartLabels: string[] = ['1950-1954', '1955-1959','1960-1964','1965-1969','1970-1974','1975-1979','1980-1984','1985-1989','1990-1994','1995-1999','2000-2005'];
   ageCategoryChartData: ChartData<'doughnut'> = {
     labels: this.ageCategoryChartLabels,
     datasets: [{
       data: [],
       backgroundColor: [
-        'rgba(255, 218, 121, 0.6)',
-        'rgba(245, 176, 142, 0.6)',
-        'rgba(226, 145, 192, 0.6)',
-        'rgba(187, 222, 251, 0.6)',
-        'rgba(208, 233, 190, 0.6)',
-        'rgba(255, 218, 121, 0.6)',
-        'rgba(245, 176, 142, 0.6)',
-        'rgba(226, 145, 192, 0.6)',
-        'rgba(187, 222, 251, 0.6)',
-        'rgba(208, 233, 190, 0.6)'
+        '#FF6384', // Red
+        '#36A2EB', // Blue
+        '#FFCE56', // Yellow
+        '#4BC0C0', // Aqua
+        '#9966FF', // Purple
+        '#FF8A80', // Coral
+        '#4DB6AC', // Teal
+        '#F4D03F', // Yellow
+        '#BA68C8', // Lavender
+        '#80CBC4', // Turquoise
+        '#FFD54F'  // Amber
       ],
       hoverOffset: 4
     }]
