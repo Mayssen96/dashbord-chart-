@@ -18,6 +18,7 @@ export class DashboardComponent implements OnInit {
   doughnutChartOptions: ChartOptions = {
     responsive: true,
   };
+
   doughnutChartLabels: string[] = ['admin', 'client'];
   doughnutChartData: ChartData<'doughnut'> = {
     labels: this.doughnutChartLabels,
@@ -36,30 +37,36 @@ export class DashboardComponent implements OnInit {
       tooltip: {
         callbacks: {
           label: (tooltipItem: TooltipItem<'doughnut'>) => {
-            const count = tooltipItem.raw as number;
+            const index = tooltipItem.dataIndex;
+            const dataset = tooltipItem.dataset as ChartData<'doughnut'>['datasets'][number];
+            const count = dataset.data?.[index] as number;
             const percentage = ((count / this.totalUsers) * 100).toFixed(2);
-            return `Count: ${count} (${percentage}%)`;
+            const label = dataset.label ?? '';
+            const ageRange = this.ageCategoryChartLabels[index] ?? '';
+            
+            return `User number: ${count} (${percentage}%) - Age Range: ${ageRange}`;
           }
         }
       }
     }
   };
+  
   ageCategoryChartLabels: string[] = [];
   ageCategoryChartData: ChartData<'doughnut'> = {
     labels: this.ageCategoryChartLabels,
     datasets: [{
       data: [],
       backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 205, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(201, 203, 207, 0.2)',
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(255, 159, 64, 0.2)',
-        'rgba(255, 205, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)'
+        'rgba(255, 218, 121, 0.6)',
+        'rgba(245, 176, 142, 0.6)',
+        'rgba(226, 145, 192, 0.6)',
+        'rgba(187, 222, 251, 0.6)',
+        'rgba(208, 233, 190, 0.6)',
+        'rgba(255, 218, 121, 0.6)',
+        'rgba(245, 176, 142, 0.6)',
+        'rgba(226, 145, 192, 0.6)',
+        'rgba(187, 222, 251, 0.6)',
+        'rgba(208, 233, 190, 0.6)'
       ],
       hoverOffset: 4
     }]
@@ -121,5 +128,3 @@ export class DashboardComponent implements OnInit {
     );
   }
 }
-
-
