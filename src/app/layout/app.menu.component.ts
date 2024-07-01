@@ -53,44 +53,44 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Modules',
                 items: [
-                    {
-                        label: 'Events',
-                        icon: 'pi pi-fw pi-user-edit',
-                        routerLink: ['/contenu/events'],
-                    },
-                    {
-                        label: 'Reservation',
-                        icon: 'pi pi-fw pi-user-edit',
-                        routerLink: ['/contenu/reservation'],
-                    },
+                    // {
+                    //     label: 'Events',
+                    //     icon: 'pi pi-fw pi-user-edit',
+                    //     routerLink: ['/contenu/events'],
+                    // },
+                    // {
+                    //     label: 'Reservation',
+                    //     icon: 'pi pi-fw pi-user-edit',
+                    //     routerLink: ['/contenu/reservation'],
+                    // },
                   
                     
                     {
                         label: 'Users',
                         icon: 'pi pi-fw pi-user-edit',
                         routerLink: ['/contenu/utilisateurs'],
-                    },
-                    {
-                        label: 'Category',
-                        icon: 'pi pi-fw pi-user-edit',
-                        routerLink: ['/contenu/category'],
-                    },
-                    {
-                        label: 'Themes',
-                        icon: 'pi pi-fw pi-user-edit',
-                        routerLink: ['/contenu/themes'],
-                    },
-                    {
-                        label: 'Experiences',
-                        icon: 'pi pi-fw pi-user-edit',
-                        routerLink: ['/contenu/experiences'],   
-                    },
+                    }//,
+                    // {
+                    //     label: 'Category',
+                    //     icon: 'pi pi-fw pi-user-edit',
+                    //     routerLink: ['/contenu/category'],
+                    // },
+                    // {
+                    //     label: 'Themes',
+                    //     icon: 'pi pi-fw pi-user-edit',
+                    //     routerLink: ['/contenu/themes'],
+                    // },
+                    // {
+                    //     label: 'Experiences',
+                    //     icon: 'pi pi-fw pi-user-edit',
+                    //     routerLink: ['/contenu/experiences'],   
+                    // },
 
-                    {
-                        label: 'Destination Category ',
-                        icon: 'pi pi-fw pi-user-edit',
-                        routerLink: ['/contenu/DestinationCategory'],   
-                    },
+                    // {
+                    //     label: 'Destination Category ',
+                    //     icon: 'pi pi-fw pi-user-edit',
+                    //     routerLink: ['/contenu/DestinationCategory'],   
+                    // },
 
                 ],
             },

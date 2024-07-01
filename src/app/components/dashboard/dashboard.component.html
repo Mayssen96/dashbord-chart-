@@ -1,9 +1,15 @@
-<!-- dashboard.component.html -->
 <div class="container">
   <h1>Admin Dashboard</h1>
 
+  <!-- Buttons for separate dashboards -->
+  <div class="button-container" style="text-align: center; margin: 20px 0;">
+    <button (click)="showUserRolesChart()" class="btn btn-primary" style="margin: 10px;">Show User Roles</button>
+    <button (click)="showAgeCategoryChart()" class="btn btn-primary" style="margin: 10px;">Show Users by Age Category</button>
+    <button (click)="showUserStatusChart()" class="btn btn-primary" style="margin: 10px;">Show Users by Status</button>
+  </div>
+
   <!-- User Roles Chart -->
-  <div class="chart-container" style="width: 50%; margin: 0 auto;">
+  <div *ngIf="displayUserRolesChart" class="chart-container" style="width: 50%; margin: 0 auto;">
     <h2>User Roles</h2>
     <div *ngIf="loadingDoughnutChart">Loading...</div>
     <div *ngIf="!loadingDoughnutChart">
@@ -18,10 +24,10 @@
   </div>
 
   <!-- Separator Line -->
-  <hr style="border: 0; height: 2px; background: #333; margin: 40px 0; width: 80%; margin-left: auto; margin-right: auto;">
+  <hr *ngIf="displayUserRolesChart || displayAgeCategoryChart || displayUserStatusChart" style="border: 0; height: 2px; background: #333; margin: 40px 0; width: 80%; margin-left: auto; margin-right: auto;">
 
   <!-- Users by Age Category Chart -->
-  <div class="chart-container" style="width: 50%; margin: 30px auto;">
+  <div *ngIf="displayAgeCategoryChart" class="chart-container" style="width: 50%; margin: 30px auto;">
     <h2>Users by Age Category</h2>
     <div *ngIf="loadingAgeCategoryChart">Loading...</div>
     <div *ngIf="!loadingAgeCategoryChart">
@@ -30,6 +36,21 @@
               [type]="ageCategoryChartType"
               [options]="ageCategoryChartOptions"
               [legend]="ageCategoryChartLegend"
+              style="width: 100%; height: auto;">
+      </canvas>
+    </div>
+  </div>
+
+  <!-- Users by Status Chart -->
+  <div *ngIf="displayUserStatusChart" class="chart-container" style="width: 50%; margin: 30px auto;">
+    <h2>Users by Status</h2>
+    <div *ngIf="loadingUserStatusChart">Loading...</div>
+    <div *ngIf="!loadingUserStatusChart">
+      <canvas baseChart
+              [data]="userStatusChartData"
+              [type]="userStatusChartType"
+              [options]="userStatusChartOptions"
+              [legend]="userStatusChartLegend"
               style="width: 100%; height: auto;">
       </canvas>
     </div>

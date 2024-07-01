@@ -8,6 +8,11 @@ interface UserAgeData {
   count: number;
 }
 
+interface UserStatusCounts {
+  activeUsers: number;
+  inactiveUsers: number;
+}
+
 @Component({
   templateUrl: './dashboard.component.html',
   providers: [MessageService]
@@ -15,10 +20,13 @@ interface UserAgeData {
 export class DashboardComponent implements OnInit {
   adminCount!: number;
   clientCount!: number;
+  activeUsers!: number;
+  inactiveUsers!: number;
+
+  // Doughnut Chart for User Roles
   doughnutChartOptions: ChartOptions = {
     responsive: true,
   };
-
   doughnutChartLabels: string[] = ['admin', 'client'];
   doughnutChartData: ChartData<'doughnut'> = {
     labels: this.doughnutChartLabels,
@@ -31,6 +39,7 @@ export class DashboardComponent implements OnInit {
   doughnutChartType: ChartType = 'doughnut';
   doughnutChartLegend = true;
 
+  // Doughnut Chart for User Age Categories
   ageCategoryChartOptions: ChartOptions = {
     responsive: true,
     plugins: {
@@ -40,32 +49,23 @@ export class DashboardComponent implements OnInit {
             const index = tooltipItem.dataIndex;
             const dataset = tooltipItem.dataset as ChartData<'doughnut'>['datasets'][number];
             const count = dataset.data?.[index] as number;
-            const label = dataset.label ?? '';
-            
             return `User number: ${count}`;
           }
         }
       }
     }
   };
-
-  ageCategoryChartLabels: string[] = ['1950-1954', '1955-1959','1960-1964','1965-1969','1970-1974','1975-1979','1980-1984','1985-1989','1990-1994','1995-1999','2000-2005'];
+  ageCategoryChartLabels: string[] = [
+    '1950-1954', '1955-1959', '1960-1964', '1965-1969', '1970-1974',
+    '1975-1979', '1980-1984', '1985-1989', '1990-1994', '1995-1999', '2000-2005'
+  ];
   ageCategoryChartData: ChartData<'doughnut'> = {
     labels: this.ageCategoryChartLabels,
     datasets: [{
       data: [],
       backgroundColor: [
-        '#FF6384', // Red
-        '#36A2EB', // Blue
-        '#FFCE56', // Yellow
-        '#4BC0C0', // Aqua
-        '#9966FF', // Purple
-        '#FF8A80', // Coral
-        '#4DB6AC', // Teal
-        '#F4D03F', // Yellow
-        '#BA68C8', // Lavender
-        '#80CBC4', // Turquoise
-        '#FFD54F'  // Amber
+        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
+        '#FF8A80', '#4DB6AC', '#F4D03F', '#BA68C8', '#80CBC4', '#FFD54F'
       ],
       hoverOffset: 4
     }]
@@ -73,9 +73,29 @@ export class DashboardComponent implements OnInit {
   ageCategoryChartType: ChartType = 'doughnut';
   ageCategoryChartLegend = true;
 
+  // Doughnut Chart for User Status
+  userStatusChartOptions: ChartOptions = {
+    responsive: true,
+  };
+  userStatusChartLabels: string[] = ['Active Users', 'Inactive Users'];
+  userStatusChartData: ChartData<'doughnut'> = {
+    labels: this.userStatusChartLabels,
+    datasets: [{
+      data: [],
+      backgroundColor: ['rgb(75, 192, 192)', 'rgb(255, 159, 64)'],
+      hoverOffset: 4
+    }]
+  };
+  userStatusChartType: ChartType = 'doughnut';
+  userStatusChartLegend = true;
+
   loadingDoughnutChart = true;
   loadingAgeCategoryChart = true;
-  totalUsers: number = 0;
+  loadingUserStatusChart = true;
+
+  displayUserRolesChart = false;
+  displayAgeCategoryChart = false;
+  displayUserStatusChart = false;
 
   constructor(
     private userService: UserService,
@@ -85,6 +105,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.loadUserRolesData();
     this.loadUsersByAgeCategoryData();
+    this.loadUserStatusData();
   }
 
   loadUserRolesData() {
@@ -112,7 +133,6 @@ export class DashboardComponent implements OnInit {
       (data: UserAgeData[]) => {
         this.ageCategoryChartLabels = data.map(item => item.range);
         this.ageCategoryChartData.datasets[0].data = data.map(item => item.count);
-        this.totalUsers = data.reduce((sum, item) => sum + item.count, 0);
         this.loadingAgeCategoryChart = false;
       },
       (error) => {
@@ -125,5 +145,43 @@ export class DashboardComponent implements OnInit {
         this.loadingAgeCategoryChart = false;
       }
     );
+  }
+
+  loadUserStatusData() {
+    this.userService.getUserStatusCounts().subscribe(
+      (data: UserStatusCounts) => {
+        this.activeUsers = data.activeUsers;
+        this.inactiveUsers = data.inactiveUsers;
+        this.userStatusChartData.datasets[0].data = [this.activeUsers, this.inactiveUsers];
+        this.loadingUserStatusChart = false;
+      },
+      (error) => {
+        console.error('Error fetching user status counts:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to load user status counts.'
+        });
+        this.loadingUserStatusChart = false;
+      }
+    );
+  }
+
+  showUserRolesChart() {
+    this.displayUserRolesChart = true;
+    this.displayAgeCategoryChart = false;
+    this.displayUserStatusChart = false;
+  }
+
+  showAgeCategoryChart() {
+    this.displayUserRolesChart = false;
+    this.displayAgeCategoryChart = true;
+    this.displayUserStatusChart = false;
+  }
+
+  showUserStatusChart() {
+    this.displayUserRolesChart = false;
+    this.displayAgeCategoryChart = false;
+    this.displayUserStatusChart = true;
   }
 }
