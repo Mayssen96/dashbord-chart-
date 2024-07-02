@@ -32,7 +32,7 @@ import { ResetpasswordComponent } from './components/resetpassword/resetpassword
                             component: ProfileComponent,
                             // canActivate: [AuthGuard],
                         },
-                        { path: '', pathMatch: 'full', redirectTo: 'login' },
+                        { path: '', pathMatch: 'full', redirectTo: 'dashbord' },
                         { path: 'register', component: RegisterComponent },
                         { path: 'login', component: LoginComponent },
                         { path: 'reset', component: ResetpasswordComponent },
