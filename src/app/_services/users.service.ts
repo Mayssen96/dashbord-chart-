@@ -22,7 +22,8 @@ export class UserService {
 
     updateUser(user: User){
         console.log('user updated ' + user);
-        return this.http.put(this.apiUrl+user.id, user);
+
+        return this.http.put(this.apiUrl+'nopwd/'+user.id, user);
     }
 
     updateUserPassword(user: User, password: string): Observable<User> {

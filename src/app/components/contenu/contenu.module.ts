@@ -57,6 +57,7 @@ import { DestinationCategoriesComponent } from './destination-categories/destina
         FormationComponent,
         ReservationComponent,
         UserFormationComponent,
+    
         CalendrierComponent,
         AstucesComponent,
         AstuceFormComponent,

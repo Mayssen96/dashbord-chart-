@@ -19,7 +19,6 @@ require('jspdf-autotable');
     templateUrl: './utilisateurs.component.html',
     styleUrls: ['./utilisateurs.component.scss'],
     providers: [ConfirmationService, MessageService],
-    
 })
 export class UtilisateursComponent implements OnInit {
     users: User[] = [];
@@ -31,25 +30,23 @@ export class UtilisateursComponent implements OnInit {
     exportColumns: any[] | undefined;
     cols: any[] | undefined;
     countusers: number = 0;
-    roles:any[]=['admin','user'];
-    // selectedRole : string = '';
+    roles: any[] = ['admin', 'user'];
     selectedRole: Role | null = null;
-    companyName: string='';
+    companyName: string = '';
     @ViewChild('dt') dt: Table | undefined;
     CongeService: any;
-    currentUser:any;
-
+    currentUser: any;
+    countries: string[] = ['United States', 'Canada', 'United Kingdom', 'Germany', 'France', 'Italy', 'Spain', 'Australia', 'Brazil', 'India', 'China', 'Japan']; // Add more countries as needed
 
     constructor(
         private userService: UserService,
         private authService: AuthService,
-        private companyService:CompanyService,
+        private companyService: CompanyService,
         private messageService: MessageService,
         private confirmationService: ConfirmationService
     ) {}
 
     ngOnInit(): void {
-     //   this.loadData();
         this.isAdmin = this.authService.isAdmin();
         this.getAll();
         this.getCompany();
@@ -69,21 +66,15 @@ export class UtilisateursComponent implements OnInit {
             title: col.header,
             dataKey: col.field,
         }));
-        // this.userService.getCurrentUser().subscribe(
-        //     (r)=>{
-        //         this.currentUser=r;
-        //     }
-        // );
-        this.currentUser=this.authService.getToken();
-        console.log('this.currentUser',this.authService.getToken())
-
+        this.currentUser = this.authService.getToken();
+        console.log('this.currentUser', this.authService.getToken());
     }
 
     getAll() {
         this.userService.getAllusers().subscribe(
             (r) => {
                 this.users = r;
-                console.log(this.user.companyId)
+                console.log(this.user.companyId);
                 console.table(this.users);
 
                 this.loading = false;
@@ -93,13 +84,12 @@ export class UtilisateursComponent implements OnInit {
             }
         );
     }
-    getCompany(){
-        this.companyService.getNameCompany(1).subscribe(
-            (res)=>{
-               this.companyName=res.name;
-               console.log('this.companyName',this.companyName)
-            }
-        )
+
+    getCompany() {
+        this.companyService.getNameCompany(1).subscribe((res) => {
+            this.companyName = res.name;
+            console.log('this.companyName', this.companyName);
+        });
     }
 
     openNew() {
@@ -121,36 +111,34 @@ export class UtilisateursComponent implements OnInit {
 
     ExportPDF() {
         this.userService.getUserCount().subscribe((r: number) => {
-        this.countusers = r;
-        let doc = new jsPDF.default('l', 'pt');
-        var img = new Image();
-        img.src = 'assets/images/HR1.png';
-        doc.addImage(img, 'png', 100, 20, 100, 100);
-        doc.setTextColor(0, 0, 139);
-        var date = formatDate(new Date(), 'yyyy/MM/dd hh:mm a', 'en');
-        doc.text(600, 70, 'HR.TN');
-        doc.text(600, 90, ' ' + date);
-        doc.text(600, 110, 'Total des Utilisateurs est ' + this.countusers);
-        doc.text(110, 110, 'HR.TN');
-        doc.setTextColor(255, 0, 0);
-        doc.setFontSize(20);
-        doc.setFont('bold');
-        doc.text(320, 130, 'Liste des Utilisateurs\n');
-        doc.autoTable(this.exportColumns, this.users, {
-            theme: 'grid',
-            styles: {
-                halign: 'left',
-            },
-            margin: {
-                top: 180,
-            },
+            this.countusers = r;
+            let doc = new jsPDF.default('l', 'pt');
+            var img = new Image();
+            img.src = 'assets/images/HR1.png';
+            doc.addImage(img, 'png', 100, 20, 100, 100);
+            doc.setTextColor(0, 0, 139);
+            var date = formatDate(new Date(), 'yyyy/MM/dd hh:mm a', 'en');
+            doc.text(600, 70, 'HR.TN');
+            doc.text(600, 90, ' ' + date);
+            doc.text(600, 110, 'Total des Utilisateurs est ' + this.countusers);
+            doc.text(110, 110, 'HR.TN');
+            doc.setTextColor(255, 0, 0);
+            doc.setFontSize(20);
+            doc.setFont('bold');
+            doc.text(320, 130, 'Liste des Utilisateurs\n');
+            doc.autoTable(this.exportColumns, this.users, {
+                theme: 'grid',
+                styles: {
+                    halign: 'left',
+                },
+                margin: {
+                    top: 180,
+                },
+            });
+            doc.setTextColor(0, 0, 0);
+            doc.save('Utilisateurs_' + new Date().getTime() + '.pdf');
         });
-        doc.setTextColor(0, 0, 0);
-        doc.save('Utilisateurs_' + new Date().getTime() + '.pdf');
-    });
     }
-
-
 
     exportexcell(exportColumns: any) {
         const replacer = (key: any, value: null) =>
@@ -180,136 +168,85 @@ export class UtilisateursComponent implements OnInit {
         );
     }
 
-    /* deleteSelectedUsers() {
-        this.confirmationService.confirm({
-            message: 'Are you sure you want to delete the selected users?',
-            header: 'Confirm',
-            icon: 'pi pi-exclamation-triangle',
-            accept: () => {
-                const ids = this.selectedUsers.map(user => user.id!);
-                const observables = ids.map(id => this.userService.removeUser(user));
-                forkJoin(observables).subscribe({
-                    next: () => {
-                        this.users = this.users.filter(val => !this.selectedUsers.includes(val));
-                        this.selectedUsers = [];
-                        this.messageService.add({
-                            severity: 'success',
-                            summary: 'Successful',
-                            detail: 'Users Deleted',
-                            life: 3000,
-                        });
-                    },
-                    error: (e) => {
-                        console.error(e);
-                    }
-                });
-            }
-        });
-    } */
-
     editUser(user: User) {
         this.user = { ...user };
         this.userDialog = true;
-        console.log(user)
+        console.log(user);
     }
+
     deleteUser(user: User) {
         if (user.id !== undefined) {
-            this.userService.removeUser(user).subscribe(() => {
-                //this.users = this.users.filter(u => u.id !== user.id);
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Successful',
-                    detail: 'User Deleted',
-                    life: 3000,
-                });
-            }, (error) => {
-                console.error('Error deleting user:', error);
-            });
+            this.userService.removeUser(user).subscribe(
+                () => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Successful',
+                        detail: 'User Deleted',
+                        life: 3000,
+                    });
+                },
+                (error) => {
+                    console.error('Error deleting user:', error);
+                }
+            );
         } else {
             console.error('User ID is undefined, cannot delete user.');
         }
     }
-
 
     hideDialog() {
         this.userDialog = false;
         this.loading = false;
     }
 
-    // saveUser() {
-    //     this.loading = true;
-    //     if (this.user.id) {
-    //         this.userService.updateUser(this.user).subscribe((r) => {
-    //             console.log(r);
-    //         });
-    //         this.users[this.findIndexById(this.user.id)] = this.user;
-    //         this.messageService.add({
-    //             severity: 'success',
-    //             summary: 'Successful',
-    //             detail: 'User Updated',
-    //             life: 3000,
-    //         });
-    //     } else {
-    //         this.userService.addUser(this.user).subscribe((r) => {
-    //             this.users.push(r);
-    //             this.messageService.add({
-    //                 severity: 'success',
-    //                 summary: 'Successful',
-    //                 detail: 'User Created',
-    //                 life: 3000,
-    //             });
-    //             ('');
-    //         });
-    //     }
-
-    //     this.users = [...this.users];
-    //     this.userDialog = false;
-    //     this.user = new User();
-    // }
     saveUser() {
         this.loading = true;
-       
+
         if (this.user.id !== undefined && this.user.id !== null) {
-            this.userService.updateUser(this.user).subscribe((r) => {
-                const index = this.findIndexById(this.user.id!);
-                if (index !== -1) {
-                    this.users[index] = this.user;
+            this.userService.updateUser(this.user).subscribe(
+                (r) => {
+                    const index = this.findIndexById(this.user.id!);
+                    if (index !== -1) {
+                        this.users[index] = this.user;
+                    }
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Successful',
+                        detail: 'User Updated',
+                        life: 3000,
+                    });
+                    this.users = [...this.users];
+                    this.userDialog = false;
+                    this.user = new User();
+                    this.loading = false;
+                },
+                (error) => {
+                    console.error('Error updating user:', error);
+                    this.loading = false;
                 }
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Successful',
-                    detail: 'User Updated',
-                    life: 3000,
-                });
-                this.users = [...this.users];
-                this.userDialog = false;
-                this.user = new User();
-                this.loading = false;
-            }, (error) => {
-                console.error('Error updating user:', error);
-                this.loading = false;
-            });
+            );
         } else {
-            this.userService.addUser(this.user).subscribe((r) => {
-                this.users.push(r);
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Successful',
-                    detail: 'User Created',
-                    life: 3000,
-                });
-                this.users = [...this.users];
-                this.userDialog = false;
-                this.user = new User();
-                this.loading = false;
-            }, (error) => {
-                console.error('Error adding user:', error);
-                this.loading = false;
-            });
+            this.userService.addUser(this.user).subscribe(
+                (r) => {
+                    this.users.push(r);
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Successful',
+                        detail: 'User Created',
+                        life: 3000,
+                    });
+                    this.users = [...this.users];
+                    this.userDialog = false;
+                    this.user = new User();
+                    this.loading = false;
+                },
+                (error) => {
+                    console.error('Error adding user:', error);
+                    this.loading = false;
+                }
+            );
         }
     }
-
-
 
     applyFilterGlobal($event: any, stringVal: any) {
         this.dt!.filterGlobal(
@@ -319,6 +256,6 @@ export class UtilisateursComponent implements OnInit {
     }
 
     findIndexById(id: number): number {
-        return this.users.findIndex(user => user.id === id);
+        return this.users.findIndex((user) => user.id === id);
     }
 }
