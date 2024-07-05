@@ -206,6 +206,19 @@
             <p-dropdown id="country" [(ngModel)]="user.country" [options]="countries"></p-dropdown>
             <small class="p-error" *ngIf="!user.country">Role is required.</small>
         </div>
+        
+
+
+        <div class="field">
+            <label for="status">Status</label>
+            <p-dropdown id="status" [(ngModel)]="user.status" [options]="statusTab">
+              <ng-template let-item pTemplate="item">
+                <span>{{ item }}</span>
+              </ng-template>
+            </p-dropdown>
+            
+          </div>
+          
 
     
     <!--     <div class="field">

@@ -47,6 +47,7 @@ export class UtilisateursComponent implements OnInit {
   // Add more countries here
 ];
 
+statusTab:boolean[]=[true,false]
     constructor(
         private userService: UserService,
         private authService: AuthService,
