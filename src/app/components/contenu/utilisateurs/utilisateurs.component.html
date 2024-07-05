@@ -1,5 +1,4 @@
 <p-toast></p-toast>
-
 <div class="card">
     <!-- <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
@@ -43,7 +42,13 @@
         [value]="users"
         [rows]="10"
         [paginator]="true"
-        [globalFilterFields]="['username', 'email', 'firstName', 'lastname','role']"
+        [globalFilterFields]="[
+            'username',
+            'email',
+            'firstName',
+            'lastname',
+            'role'
+        ]"
         responsiveLayout="scroll"
         [(selection)]="selectedUsers"
         [rowHover]="true"
@@ -57,14 +62,12 @@
                 <span class="p-input-icon-left">
                     <i class="pi pi-search"></i>
                     <input
-                    #globalSearch
+                        #globalSearch
                         pInputText
                         type="text"
-                        (input)=" dt.filterGlobal(
-                                        globalSearch.value,
-                                        'contains'
-                                    )
-                                "
+                        (input)="
+                            dt.filterGlobal(globalSearch.value, 'contains')
+                        "
                         placeholder="Search..."
                         class="recherche"
                     />
@@ -76,7 +79,7 @@
                 <th style="width: 3rem">
                     <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                 </th>
-                
+
                 <th pSortableColumn="email">
                     Email <p-sortIcon field="email"></p-sortIcon>
                 </th>
@@ -95,36 +98,45 @@
                 <th pSortableColumn="role">
                     Role <p-sortIcon field="role"></p-sortIcon>
                 </th>
-                
+
+                <th pSortableColumn="status">
+                    Status <p-sortIcon field="status"></p-sortIcon>
+                </th>
                 <th></th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-user [disabled]="user.status==false">
-            <tr >
+        <ng-template
+            pTemplate="body"
+            let-user
+            [disabled]="user.status == false"
+        >
+            <tr>
                 <td>
                     <p-tableCheckbox [value]="user"></p-tableCheckbox>
                 </td>
-               
-                <td >{{ user.email }}</td>
+                <td>{{ user.email }}</td>
                 <td>{{ user.firstName }}</td>
                 <td>{{ user.lastName }}</td>
-                <td>{{ user.country}}</td>
-                <td>{{ user.birthDate|date:'dd/MM/yyyy'}}</td>
-                <td>{{ user.role}}</td>
+                <td>{{ user.country }}</td>
+                <td>{{ user.birthDate | date : "dd/MM/yyyy" }}</td>
+                <td>{{ user.role }}</td>
+                <td>{{ user.status }}</td>
                 <td>
                     <button
                         pButton
                         pRipple
                         icon="pi pi-pencil"
                         class="p-button-rounded p-button-success mr-2"
-                        (click)="editUser(user)" [disabled]="user.role=='admin'"
+                        (click)="editUser(user)"
+                        [disabled]="user.role == 'admin'"
                     ></button>
                     <button
                         pButton
                         pRipple
                         icon="pi pi-trash"
                         class="p-button-rounded p-button-warning"
-                        (click)="deleteUser(user)" [disabled]="user.role=='admin'"
+                        (click)="deleteUser(user)"
+                        [disabled]="user.role == 'admin'"
                     ></button>
                 </td>
             </tr>
@@ -172,8 +184,6 @@
             />
         </div>
 
-       
-
         <div class="field">
             <label for="email">Email</label>
             <input
@@ -189,16 +199,36 @@
                 >Email is required.</small
             >
         </div>
+       
+
         <div class="field">
             <label for="country">Country</label>
-            <select pInputText id="country" required
-            autofocus>
-                <option pInputText value="{{user.country}}" [(ngModel)]="user.country">{{user.country}}</option>
-            </select>
-            <small class="p-error" *ngIf="!user.country"
-                >country is required.</small
-            >
+            <p-dropdown id="country" [(ngModel)]="user.country" [options]="countries"></p-dropdown>
+            <small class="p-error" *ngIf="!user.country">Role is required.</small>
         </div>
+
+    
+    <!--     <div class="field">
+            <label for="role">Role</label>
+            <p-dropdown
+                id="role"
+                [(ngModel)]="user.role"
+                [options]="roleOptions"
+                
+                optionLabel="label"
+                
+               
+            ></p-dropdown>
+            <small class="p-error" *ngIf="!user.role">Role is required.</small>
+        </div> -->
+
+        <div class="field">
+            <label for="role">Role</label>
+            <p-dropdown id="role" [(ngModel)]="user.role" [options]="roleOptions"></p-dropdown>
+            <small class="p-error" *ngIf="!user.role">Role is required.</small>
+        </div>
+
+
         <div class="field">
             <label for="birthDate">Birth Date</label>
             <input
@@ -208,14 +238,14 @@
                 [(ngModel)]="user.birthDate"
                 required
                 autofocus
-                
             />
+
+
+
             <small class="p-error" *ngIf="!user.birthDate"
                 >Birth Date is required.</small
             >
         </div>
-     
-        
     </ng-template>
 
     <ng-template pTemplate="footer">

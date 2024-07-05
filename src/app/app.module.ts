@@ -34,6 +34,7 @@ import { ResetpasswordComponent } from './components/resetpassword/resetpassword
 import { NgChartsModule } from 'ng2-charts';
 import { ReclamtionComponent } from './components/reclamtion/reclamtion.component';
 import { AvisComponent } from './components/avis/avis.component';
+import { DdMmYYYYDatePipe } from './dd-mm-yyyy-date.pipe';
 
 
 @NgModule({
@@ -45,6 +46,7 @@ import { AvisComponent } from './components/avis/avis.component';
         ResetpasswordComponent,
         ReclamtionComponent,
         AvisComponent,
+        DdMmYYYYDatePipe,
         
         
     ],

@@ -22,7 +22,6 @@ export class User {
     lastName!:string;
     birthDate!:Date;
     country!: string;
-    
     role!:string;
     verificationToken!: string ;
     status: boolean=false;

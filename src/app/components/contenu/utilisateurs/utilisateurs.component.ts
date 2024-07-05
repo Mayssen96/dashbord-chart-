@@ -9,6 +9,8 @@ import * as FileSaver from 'file-saver';
 import { saveAs } from 'file-saver';
 import { CompanyService } from 'src/app/_services/company.service';
 import { forkJoin } from 'rxjs';
+import { DropdownModule } from 'primeng/dropdown';
+import { DatePipe } from '@angular/common';
 //import jsPDF from 'jspdf';
 declare const require: any;
 const jsPDF = require('jspdf');
@@ -18,8 +20,9 @@ require('jspdf-autotable');
     selector: 'app-utilisateurs',
     templateUrl: './utilisateurs.component.html',
     styleUrls: ['./utilisateurs.component.scss'],
-    providers: [ConfirmationService, MessageService],
+    providers: [ConfirmationService, MessageService,DatePipe],
 })
+
 export class UtilisateursComponent implements OnInit {
     users: User[] = [];
     loading: boolean = true;
@@ -36,7 +39,13 @@ export class UtilisateursComponent implements OnInit {
     @ViewChild('dt') dt: Table | undefined;
     CongeService: any;
     currentUser: any;
-    countries: string[] = ['United States', 'Canada', 'United Kingdom', 'Germany', 'France', 'Italy', 'Spain', 'Australia', 'Brazil', 'India', 'China', 'Japan']; // Add more countries as needed
+  countries: string[] = [
+  'United States', 'Canada', 'United Kingdom', 'Germany', 'France', 'Italy', 'Spain', 'Australia', 'Brazil', 'India', 
+  'China', 'Japan', 'Mexico', 'Russia', 'South Africa', 'Argentina', 'Netherlands', 'Sweden', 'Switzerland', 'Turkey', 
+  'Portugal', 'Belgium', 'Norway', 'Denmark', 'Finland', 'Greece', 'Austria', 'Poland', 'Czech Republic', 'Hungary', 
+  'Romania', 'Ukraine', 'Vietnam', 'Thailand', 'South Korea', 'Indonesia', 'Malaysia', 'Singapore', 'Tunisia', 
+  // Add more countries here
+];
 
     constructor(
         private userService: UserService,
@@ -45,7 +54,10 @@ export class UtilisateursComponent implements OnInit {
         private messageService: MessageService,
         private confirmationService: ConfirmationService
     ) {}
+    
+    roleOptions: string[] = ['admin', 'client'];
 
+    
     ngOnInit(): void {
         this.isAdmin = this.authService.isAdmin();
         this.getAll();
@@ -200,6 +212,7 @@ export class UtilisateursComponent implements OnInit {
     }
 
     saveUser() {
+        console.log(this.user)
         this.loading = true;
 
         if (this.user.id !== undefined && this.user.id !== null) {
