@@ -10,6 +10,7 @@ import { UtilisateursComponent } from './components/contenu/utilisateurs/utilisa
 
 import { ProfileComponent } from './components/profile/profile.component';
 import { ResetpasswordComponent } from './components/resetpassword/resetpassword.component';
+import { SidebarModule } from 'primeng/sidebar';
 
 @NgModule({
     imports: [
@@ -27,6 +28,14 @@ import { ResetpasswordComponent } from './components/resetpassword/resetpassword
                             // data: { role: 'ROLE_ADMIN' }
 
                         },
+                        {
+                            path: 'dashboard',
+                            component: SidebarModule,
+                            // canActivate: [AuthGuard],
+                            // data: { role: 'ROLE_ADMIN' }
+
+                        },
+                       
                         {
                             path: 'profile',
                             component: ProfileComponent,

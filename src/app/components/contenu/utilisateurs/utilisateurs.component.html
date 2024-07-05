@@ -157,32 +157,50 @@
     styleClass="p-fluid"
 >
     <ng-template pTemplate="content">
-        <div class="field">
-            <label for="firstname">FirstName</label>
-            <input
-                type="text"
-                pInputText
-                id="firstname"
-                [(ngModel)]="user.firstName"
-                required
-                autofocus
-            />
-            <small class="p-error" *ngIf="!user.firstName"
-                >firstName is required.</small
-            >
-        </div>
+
 
         <div class="field">
-            <label for="lastName">LastName</label>
+            <label for="firstname">First Name</label>
             <input
-                type="text"
-                pInputText
-                id="lastName"
-                [(ngModel)]="user.lastName"
-                required
-                autofocus
+              type="text"
+              pInputText
+              id="firstname"
+              [(ngModel)]="user.firstName"
+              required
+              autofocus
+              #firstName="ngModel"
+              minlength="3"
+              maxlength="15"
             />
-        </div>
+            <small class="p-error" *ngIf="!user.firstName">First Name is required.</small>
+            <small class="p-error" *ngIf="firstName.errors?.['minlength'] || firstName.errors?.['maxlength']">
+              First Name must be between 3 and 15 characters.
+            </small>
+            <small class="p-error" *ngIf="firstName.dirty && !validateCapitalized(firstName)">
+              First Name must start with a capital letter.
+            </small>
+          </div>
+
+          <div class="field">
+            <label for="lastName">Last Name</label>
+            <input
+              type="text"
+              pInputText
+              id="lastName"
+              [(ngModel)]="user.lastName"
+              required
+              #lastName="ngModel"
+              minlength="3"
+              maxlength="15"
+            />
+            <small class="p-error" *ngIf="!user.lastName">Last Name is required.</small>
+            <small class="p-error" *ngIf="lastName.errors?.['minlength'] || lastName.errors?.['maxlength']">
+              Last Name must be between 3 and 15 characters.
+            </small>
+            <small class="p-error" *ngIf="lastName.dirty && !validateCapitalized(lastName)">
+              Last Name must start with a capital letter.
+            </small>
+          </div>
 
         <div class="field">
             <label for="email">Email</label>

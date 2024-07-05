@@ -11,6 +11,7 @@ import { CompanyService } from 'src/app/_services/company.service';
 import { forkJoin } from 'rxjs';
 import { DropdownModule } from 'primeng/dropdown';
 import { DatePipe } from '@angular/common';
+import { NgModel } from '@angular/forms';
 //import jsPDF from 'jspdf';
 declare const require: any;
 const jsPDF = require('jspdf');
@@ -58,7 +59,10 @@ statusTab:boolean[]=[true,false]
     
     roleOptions: string[] = ['admin', 'client'];
 
-    
+    validateCapitalized(control: NgModel): boolean {
+        const value = control.value;
+        return value && typeof value === 'string' && /^[A-Z]/.test(value);
+      }
     ngOnInit(): void {
         this.isAdmin = this.authService.isAdmin();
         this.getAll();
